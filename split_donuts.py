@@ -79,10 +79,10 @@ def split_donuts(shp, out_shp):
         
 
 if __name__ == "__main__":
-    if len(sys.argv==3):
+    if len(sys.argv)==3:
         shp = sys.argv[1]
         out_shp = sys.argv[2]
-        split_donuts(out_shp)
+        split_donuts(shp, out_shp)
     else:
         print_usage()
     
