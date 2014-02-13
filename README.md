@@ -1,6 +1,10 @@
 GIS utility to splits complex multipolygons into simple polygons (closed rings without holes or multiple parts)
 
-Usage: `split_donuts.py <in_shp> <out_shp>`
+**Dependencies**
+- [Shapely](https://pypi.python.org/pypi/Shapely/) and [Fiona](https://pypi.python.org/pypi/Fiona)
+- [GDAL/OGR](http://www.gdal.org/ogr/)
+
+**Usage:** `split_donuts.py <in_shp> <out_shp>`
 
 **Works as follows**
 
