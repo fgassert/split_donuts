@@ -1,4 +1,4 @@
-GIS utility to splits complex multipolygons into simple polygons (closed rings without holes or multiple parts)
+GIS utility to split complex multipolygons into simple polygons (closed rings without holes or multiple parts)
 
 **Dependencies**
 - [Shapely](https://pypi.python.org/pypi/Shapely/) and [Fiona](https://pypi.python.org/pypi/Fiona)
@@ -11,7 +11,7 @@ GIS utility to splits complex multipolygons into simple polygons (closed rings w
 1. For each feature in a collection
 2. If it is a multipolygon split it into separate polygons
 3. For each polygon, check if it has any interior rings (holes)
-3. Pick a point the hole. Get the left half and right half of the polygon.
+3. Pick a point in the hole. Return the left half and right half of the polygon.
 4. For each resulting polygon recursively check for holes
 5. Return the resulting polygons
 
