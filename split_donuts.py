@@ -24,6 +24,7 @@ THE SOFTWARE.
 """
 
 import shapely.geometry as sg
+import shapely.validation as validation
 import fiona
 import sys
 
@@ -38,7 +39,11 @@ def split_horiz_by_point(polygon, point):
     lEnv = sg.LineString([(nx,      ny), (point.x, xy)]).envelope
     rEnv = sg.LineString([(point.x, ny), (xx,      xy)]).envelope
     
-    return [polygon.intersection(lEnv), polygon.intersection(rEnv)]
+    try:
+        return [polygon.intersection(lEnv), polygon.intersection(rEnv)]
+    except Exception as e:
+        print "Geometry error: %s" % validation.explain_validity(polygon)
+        return [polygon.buffer(0)]
 
 def check_split_multipoly(shape):
     """"""
