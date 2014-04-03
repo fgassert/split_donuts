@@ -35,5 +35,8 @@ GIS utility to split complex multipolygons into simple polygons (closed rings wi
 `tests.py`
 
 e.g. multip.shp is split as follows:
-![multip.shp](https://raw.github.com/fgassert/split_donuts/master/multip.png) -> 
+![multip.shp](https://raw.github.com/fgassert/split_donuts/master/multip.png)
+`split_donuts.py multip.shp out.shp`
 ![out.shp](https://raw.github.com/fgassert/split_donuts/master/out.png)
+`join_donuts.py multip.shp outjoin.shp`
+![outjoin.shp](https://raw.github.com/fgassert/split_donuts/master/out2.png)
