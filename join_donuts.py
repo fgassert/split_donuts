@@ -24,10 +24,15 @@ THE SOFTWARE.
 """
 
 import numpy as np
-import numexpr as ne
 import shapely.geometry as sg
 import fiona
 import sys
+
+VERBOSE = True
+
+def dprint(s):
+    if VERBOSE:
+        print s
 
 def closest_pt(pt, ptset):
     """"""
@@ -35,17 +40,22 @@ def closest_pt(pt, ptset):
     minidx = np.argmin(dist2)
     return minidx
 
-def closest_pt_ne(pt, ptset):
+def cw_perpendicular(pt, norm=None):
     """"""
-    dist2 = ne.evaluate("sum((ptset - pt) ** 2,1)")
-    minidx = np.argmin(dist2)
-    return minidx
-    
-def lazy_short_join(exter, inter, refpt):
+    d = np.sqrt((pt**2).sum()) or 1
+    if norm is None:
+        return np.array([pt[1],-pt[0]])
+    return np.array([pt[1],-pt[0]]) / d * norm
+
+def lazy_short_join_gap(exter, inter, refpt, gap=0.000001):
     """"""
-    exIdx = closest_pt_ne(refpt,exter)
-    inIdx = closest_pt_ne(exter[exIdx],inter)
-    return np.vstack((exter[:exIdx+1],inter[inIdx:],inter[:inIdx+1],exter[exIdx:]))
+    exIdx = closest_pt(refpt,exter)
+    inIdx = closest_pt(exter[exIdx],inter)
+    excwgap = exter[exIdx]+cw_perpendicular(inter[inIdx]-exter[exIdx],gap)
+    incwgap = inter[inIdx]+cw_perpendicular(exter[exIdx]-inter[inIdx],gap)
+    out = np.vstack((exter[:exIdx],excwgap,inter[inIdx:-1],inter[:inIdx],incwgap,exter[exIdx:]))
+    out[-1]=out[0]
+    return out
 
 def lazy_short_join_poly(poly):
     """"""
@@ -53,12 +63,11 @@ def lazy_short_join_poly(poly):
         ex = np.asarray(poly.exterior)
         for inter in poly.interiors:
             inArr = np.asarray(inter)
-            ex = lazy_short_join(ex, inArr, np.asarray(inter.centroid))
-        return sg.Polygon(ex)
-    else:
-        return poly
+            ex = lazy_short_join_gap(ex, inArr, np.asarray(inter.centroid))
+        poly = sg.Polygon(ex)
+    return poly
 
-def lazy_short_join_multipoly(shape):
+def lazy_short_join_multipoly(shape, correct_errors=True):
     """"""
     parts = []
     if shape.type == "MultiPolygon":
@@ -66,7 +75,26 @@ def lazy_short_join_multipoly(shape):
             parts.append(lazy_short_join_poly(p))
     elif shape.type == "Polygon":
         parts = [lazy_short_join_poly(shape)]
-    return parts
+
+    if correct_errors:
+        corrected = []
+        for poly in parts:
+            if poly.is_empty:
+                dprint("warning: removed null geometry")
+            else:
+                if not poly.is_valid:
+                    corrected.extend(lazy_short_join_multipoly(poly.buffer(0.0), False))
+                else:
+                    corrected.append(poly)
+        return corrected
+    else:
+        for poly in parts:
+            if poly.is_empty:
+                parts.remove(poly)
+                dprint("warning: removed null geometry")
+            elif not poly.is_valid:
+                dprint("warning: did not correct invalid geometry")
+        return parts
 
 def join_donuts(shp, out_shp):
     """"""
