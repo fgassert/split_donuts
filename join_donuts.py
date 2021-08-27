@@ -21,6 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+Updated 2021-03-19 for Python 3 by Andy Anderson.
+
 """
 
 import numpy as np
@@ -32,7 +35,7 @@ VERBOSE = True
 
 def dprint(s):
     if VERBOSE:
-        print s
+        print(s)
 
 def closest_pt(pt, ptset):
     """"""
@@ -115,7 +118,7 @@ def join_donuts(shp, out_shp):
 
 def print_usage():
     """"""
-    print "Usage:\tjoin_donuts.py <shape.shp> <outfile.shp>"
+    print("Usage:\tjoin_donuts.py <shape.shp> <outfile.shp>")
 
 
 if __name__ == "__main__":

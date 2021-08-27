@@ -21,6 +21,8 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+Updated 2021-03-19 for Python 3 by Andy Anderson.
 """
 
 import shapely.geometry as sg
@@ -42,7 +44,7 @@ def split_horiz_by_point(polygon, point):
     try:
         return [polygon.intersection(lEnv), polygon.intersection(rEnv)]
     except Exception as e:
-        print "Geometry error: %s" % validation.explain_validity(polygon)
+        print("Geometry error: %s" % validation.explain_validity(polygon))
         return [polygon.buffer(0)]
 
 def check_split_multipoly(shape):
@@ -63,7 +65,7 @@ def check_split_multipoly(shape):
 
 def print_usage():
     """"""
-    print "Usage:\tsplit_donuts.py <shape.shp> <outfile.shp>"
+    print("Usage:\tsplit_donuts.py <shape.shp> <outfile.shp>")
 
 
 def split_donuts(shp, out_shp):
