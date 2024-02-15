@@ -65,7 +65,6 @@ def lazy_short_join_poly(poly):
     """"""
     if len(poly.interiors):
         ex = np.asarray(poly.exterior.coords)
-        print(ex.ndim)
         for inter in poly.interiors:
             inArr = np.asarray(inter.coords)
             ex = lazy_short_join_gap(ex, inArr, np.asarray(inter.centroid.coords))
