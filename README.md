@@ -5,7 +5,7 @@ GIS utility to split complex multipolygons into simple polygons (closed rings wi
 - [GDAL/OGR](http://www.gdal.org/ogr/)
 
 
-###Use
+### Use
 
 **1. join_donuts.py** Cut donuts by joining interior holes to the exterior via closest points (reccomended)
 
@@ -17,7 +17,7 @@ GIS utility to split complex multipolygons into simple polygons (closed rings wi
 
 **Usage:** `split_donuts.py <in_shp> <out_shp>`
 
-###Algorithm
+### Algorithm
 
 **join_donuts.py works as follows**
 
@@ -39,7 +39,7 @@ GIS utility to split complex multipolygons into simple polygons (closed rings wi
 5. For each resulting polygon recursively check for holes
 6. Return the resulting polygons
 
-###Tests
+### Tests
 
 `tests.py`
 

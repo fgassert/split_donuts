@@ -50,10 +50,10 @@ def split_horiz_by_point(polygon, point):
 def check_split_multipoly(shape):
     """"""
     parts = []
-    if shape.type == "MultiPolygon":
+    if shape.geom_type == "MultiPolygon":
         for p in shape.geoms:
             parts.extend(check_split_multipoly(p))
-    elif shape.type == "Polygon":
+    elif shape.geom_type == "Polygon":
         if len(shape.interiors):
             pt = shape.interiors[0].centroid
             halves = split_horiz_by_point(shape, pt)
