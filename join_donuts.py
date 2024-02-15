@@ -21,6 +21,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+Updated 2021-03-19 for Python 3 by Andy Anderson.
+
 """
 
 import numpy as np
@@ -32,11 +35,12 @@ VERBOSE = True
 
 def dprint(s):
     if VERBOSE:
-        print s
+        print(s)
 
 def closest_pt(pt, ptset):
     """"""
-    dist2 = np.sum((ptset - pt) ** 2,1)
+    
+    dist2 = np.sum(np.asarray((ptset - pt)) ** 2,1)
     minidx = np.argmin(dist2)
     return minidx
 
@@ -60,10 +64,11 @@ def lazy_short_join_gap(exter, inter, refpt, gap=0.000001):
 def lazy_short_join_poly(poly):
     """"""
     if len(poly.interiors):
-        ex = np.asarray(poly.exterior)
+        ex = np.asarray(poly.exterior.coords)
+        print(ex.ndim)
         for inter in poly.interiors:
-            inArr = np.asarray(inter)
-            ex = lazy_short_join_gap(ex, inArr, np.asarray(inter.centroid))
+            inArr = np.asarray(inter.coords)
+            ex = lazy_short_join_gap(ex, inArr, np.asarray(inter.centroid.coords))
         poly = sg.Polygon(ex)
     return poly
 
@@ -115,7 +120,7 @@ def join_donuts(shp, out_shp):
 
 def print_usage():
     """"""
-    print "Usage:\tjoin_donuts.py <shape.shp> <outfile.shp>"
+    print("Usage:\tjoin_donuts.py <shape.shp> <outfile.shp>")
 
 
 if __name__ == "__main__":
