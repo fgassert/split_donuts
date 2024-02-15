@@ -74,10 +74,10 @@ def lazy_short_join_poly(poly):
 def lazy_short_join_multipoly(shape, correct_errors=True):
     """"""
     parts = []
-    if shape.type == "MultiPolygon":
+    if shape.geom_type == "MultiPolygon":
         for p in shape.geoms:
             parts.append(lazy_short_join_poly(p))
-    elif shape.type == "Polygon":
+    elif shape.geom_type == "Polygon":
         parts = [lazy_short_join_poly(shape)]
 
     if correct_errors:

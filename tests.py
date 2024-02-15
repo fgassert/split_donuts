@@ -26,7 +26,7 @@ Updated 2021-03-19 for Python 3 by Andy Anderson.
 """
 
 from split_donuts import *
-from shapely.ops import cascaded_union
+from shapely.ops import unary_union
 from join_donuts import *
 
 def test_split():
@@ -35,14 +35,14 @@ def test_split():
     center = donut.centroid
     res = split_horiz_by_point(donut, center)
     print("Parts (should be 2): %s" % len(res))
-    dif = cascaded_union(res).symmetric_difference(donut).area
+    dif = unary_union(res).symmetric_difference(donut).area
     print("Difference: %s" % dif)
 
     print("Split donut by exterior point")
     side = sg.Point(4,4)
     res = split_horiz_by_point(donut, side)
     print("Parts (should be 1): %s" % len(res))
-    dif = cascaded_union(res).symmetric_difference(donut).area
+    dif = unary_union(res).symmetric_difference(donut).area
     print("Difference: %s" % dif)
 
 def test_check_split():
@@ -50,7 +50,7 @@ def test_check_split():
     donut = sg.Point(0, 0).buffer(2.0).difference(sg.Point(0, 0).buffer(1.0))
     res = check_split_multipoly(donut)
     print("Parts (should be 2): %s" % len(res))
-    dif = cascaded_union(res).symmetric_difference(donut).area
+    dif = unary_union(res).symmetric_difference(donut).area
     print("Difference: %s" % dif)
 
 
@@ -58,7 +58,7 @@ def test_check_split():
     multi = sg.MultiPoint([(0, 0),(4, 0)]).buffer(2.0)
     res = check_split_multipoly(multi)
     print("Parts (should be 2): %s" % len(res))
-    dif = cascaded_union(res).symmetric_difference(multi).area
+    dif = unary_union(res).symmetric_difference(multi).area
     print("Difference: %s" % dif)
 
 
@@ -66,7 +66,7 @@ def test_check_split():
     cx = sg.MultiPoint([(0, 0),(4, 0)]).buffer(2.0).difference(sg.Point(0, 0).buffer(1.0))
     res = check_split_multipoly(cx)
     print("Parts (should be 3): %s" % len(res))
-    dif = cascaded_union(res).symmetric_difference(cx).area
+    dif = unary_union(res).symmetric_difference(cx).area
     print("Difference: %s" % dif)
 
 def test_split_shp():
@@ -78,7 +78,7 @@ def test_split_shp():
 def test_closest_pt():
     print("Check closest point in r=3 circle to 1,1")
     donut = sg.Point(0, 0).buffer(3.0)
-    exter = np.asarray(donut.exterior)
+    exter = np.asarray(donut.exterior.coords)
     res = closest_pt((1,1),exter)
     
     print("Closest point (should be (2.1,2.1)): %s" % exter[res])
@@ -97,7 +97,7 @@ def test_split_join():
     res = lazy_short_join_multipoly(cx)
     print("Parts (should be 2): %s" % len(res))
     print("Interiors (should be 0): %s" % sum([len(r.interiors) for r in res]))
-    dif = cascaded_union(res).symmetric_difference(cx).area
+    dif = unary_union(res).symmetric_difference(cx).area
     print("Difference: %s" % dif)
 
 def test_join_shp():
