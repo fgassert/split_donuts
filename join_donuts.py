@@ -39,7 +39,8 @@ def dprint(s):
 
 def closest_pt(pt, ptset):
     """"""
-    dist2 = np.sum((ptset - pt) ** 2,1)
+    
+    dist2 = np.sum(np.asarray((ptset - pt)) ** 2,1)
     minidx = np.argmin(dist2)
     return minidx
 
@@ -63,10 +64,11 @@ def lazy_short_join_gap(exter, inter, refpt, gap=0.000001):
 def lazy_short_join_poly(poly):
     """"""
     if len(poly.interiors):
-        ex = np.asarray(poly.exterior)
+        ex = np.asarray(poly.exterior.coords)
+        print(ex.ndim)
         for inter in poly.interiors:
-            inArr = np.asarray(inter)
-            ex = lazy_short_join_gap(ex, inArr, np.asarray(inter.centroid))
+            inArr = np.asarray(inter.coords)
+            ex = lazy_short_join_gap(ex, inArr, np.asarray(inter.centroid.coords))
         poly = sg.Polygon(ex)
     return poly
 
